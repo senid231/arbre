@@ -3,11 +3,13 @@ require 'arbre/element/builder_methods'
 require 'arbre/element/proxy'
 require 'arbre/element_collection'
 require 'ruby2_keywords'
+require 'arbre/element/rendering'
 
 module Arbre
 
   class Element
     include BuilderMethods
+    include Rendering
 
     attr_reader :parent
     attr_reader :children, :arbre_context
@@ -27,10 +29,10 @@ module Arbre
     end
 
     def tag_name
-      @tag_name ||= self.class.name.demodulize.downcase
+      @tag_name ||= self.class.arbre_default_tag_name
     end
 
-    def build(*args, &block)
+    def build(*, &block)
       # Render the block passing ourselves in
       append_return_block(block.call(self)) if block
     end
